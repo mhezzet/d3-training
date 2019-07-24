@@ -20,3 +20,11 @@ h2 {
   align-self: flex-start;
   margin-left: 3rem;
 }
+
+.sphere{
+  fill:mediumblue
+}
+
+.country{
+  fill:olivedrab
+}

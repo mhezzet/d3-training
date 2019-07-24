@@ -1,11 +1,13 @@
 import React from 'react'
+import AreaChart from './d3/AreaChart'
 import BarChart from './d3/BarChart'
+import BowlOfFruit from './d3/BowlOfFruit'
 import CarsScatterPlot from './d3/CarsScatterPlot'
 import Face from './d3/Face'
+import Interactions from './d3/Interactions'
+import Map from './d3/Map'
 import ScatterChart from './d3/ScatterChart'
 import TempLineChart from './d3/TempLineChart'
-import AreaChart from './d3/AreaChart'
-import BowlOfFruit from './d3/BowlOfFruit'
 
 export default function App() {
   return (
@@ -33,6 +35,10 @@ export default function App() {
         <AreaChart />
         <h2>Bowel Of Fruit - General Update Pattern</h2>
         <BowlOfFruit />
+        <h2>Bowel Of Fruit - Interactions</h2>
+        <Interactions />
+        <h2>Map Plot</h2>
+        <Map />
       </div>
     </div>
   )
