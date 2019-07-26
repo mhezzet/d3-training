@@ -17,17 +17,26 @@ h2 {
 }
 
 .sphere {
-  fill: mediumblue;
+  fill: #2f2f7d;
 }
 
 .country {
   fill: olivedrab;
-  stroke-width: 0.15px;
+  stroke-width: 0.09px;
   stroke: gold;
+}
+.country2 {
+  stroke-width: 0.09px;
+  stroke: black;
 }
 
 .country:hover {
   fill: darkolivegreen;
+}
+
+.country2:hover {
+  filter: sepia(0);
+  stroke-width: 0.5px;
 }
 
 .link {
@@ -40,4 +49,15 @@ h2 {
   text-shadow: -1px -1px 3px white, -1px 1px 3px white, 1px -1px 3px white,
     1px 1px 3px white;
   pointer-events: none;
+}
+
+.tick text {
+  font-size: 1em;
+  fill: #635f5d;
+  font-family: sans-serif;
+}
+
+.tick circle {
+  stroke: black;
+  stroke-opacity: 0.5;
 }

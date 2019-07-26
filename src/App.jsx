@@ -8,6 +8,7 @@ import Map from './d3/Map'
 import ScatterChart from './d3/ScatterChart'
 import TempLineChart from './d3/TempLineChart'
 import CountriesTree from './d3/CountriesTree'
+import ChoroplethMap from './d3/ChoroplethMap'
 
 export default function App() {
   return (
@@ -40,6 +41,8 @@ export default function App() {
         <Map />
         <h2>World Countries Tree</h2>
         <CountriesTree />
+        <h2>Choropleth Map</h2>
+        <ChoroplethMap />
       </div>
     </div>
   )
