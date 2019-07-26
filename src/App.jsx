@@ -7,6 +7,7 @@ import Interactions from './d3/Interactions'
 import Map from './d3/Map'
 import ScatterChart from './d3/ScatterChart'
 import TempLineChart from './d3/TempLineChart'
+import CountriesTree from './d3/CountriesTree'
 
 export default function App() {
   return (
@@ -17,7 +18,8 @@ export default function App() {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          justifyContent: 'center'
+          justifyContent: 'center',
+          marginBottom: 30
         }}
       >
         <h2>Fact</h2>
@@ -36,6 +38,8 @@ export default function App() {
         <Interactions />
         <h2>Map Plot</h2>
         <Map />
+        <h2>World Countries Tree</h2>
+        <CountriesTree />
       </div>
     </div>
   )
