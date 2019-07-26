@@ -21,10 +21,16 @@ h2 {
   margin-left: 3rem;
 }
 
-.sphere{
-  fill:mediumblue
+.sphere {
+  fill: mediumblue;
 }
 
-.country{
-  fill:olivedrab
+.country {
+  fill: olivedrab;
+  stroke-width: 0.15px;
+  stroke: gold;
+}
+
+.country:hover {
+  fill: darkolivegreen;
 }

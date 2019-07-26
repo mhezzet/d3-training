@@ -1,7 +1,6 @@
 import React from 'react'
 import AreaChart from './d3/AreaChart'
 import BarChart from './d3/BarChart'
-import BowlOfFruit from './d3/BowlOfFruit'
 import CarsScatterPlot from './d3/CarsScatterPlot'
 import Face from './d3/Face'
 import Interactions from './d3/Interactions'
@@ -33,8 +32,6 @@ export default function App() {
         <TempLineChart />
         <h2>Population area chart</h2>
         <AreaChart />
-        <h2>Bowel Of Fruit - General Update Pattern</h2>
-        <BowlOfFruit />
         <h2>Bowel Of Fruit - Interactions</h2>
         <Interactions />
         <h2>Map Plot</h2>
