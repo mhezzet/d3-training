@@ -8,6 +8,7 @@ import ScatterChart from './d3/ScatterChart'
 import TempLineChart from './d3/TempLineChart'
 import CountriesTree from './d3/CountriesTree'
 import ChoroplethMap from './d3/ChoroplethMap'
+import MultiLineChart from './d3/MultiLineChart'
 
 export default function App() {
   return (
@@ -40,6 +41,8 @@ export default function App() {
         <ChoroplethMap />
         <h2>Car Scatter plot</h2>
         <CarsScatterPlot />
+        <h2>Multi Line Chart</h2>
+        <MultiLineChart />
       </div>
     </div>
   )

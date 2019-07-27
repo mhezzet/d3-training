@@ -1,23 +1,29 @@
 import * as d3 from 'd3'
 import React, { useEffect, useRef } from 'react'
 
-export default function TempLineChart() {
+export default function MultiLineChart() {
   const sandbox = useRef(null)
 
   useEffect(() => {
     const svg = d3.select(sandbox.current)
     const width = svg.attr('width')
     const height = svg.attr('height')
-    const titleLabel = 'A week in san francisco'
+    const titleLabel = 'A Aeek Of Temperature Around The World'
     const xAxisLabel = 'Time'
     const yAxisLabel = 'Temperature'
 
     const render = data => {
       const yValue = d => d.temperature
       const xValue = d => d.timestamp
-      const margin = { top: 50, right: 30, bottom: 50, left: 60 }
+      const colorValue = d => d.city
+      const margin = { top: 50, right: 170, bottom: 50, left: 60 }
       const innerWidth = width - margin.right - margin.left
       const innerHeight = height - margin.top - margin.bottom
+
+      const nestedData = d3
+        .nest()
+        .key(colorValue)
+        .entries(data)
 
       const xScale = d3
         .scaleTime()
@@ -30,6 +36,10 @@ export default function TempLineChart() {
         .domain(d3.extent(data, yValue).reverse())
         .range([0, innerHeight])
         .nice()
+
+      const colorScale = d3
+        .scaleOrdinal(d3.schemeCategory10)
+        .domain(nestedData.map(data => data.key))
 
       const graph = svg
         .append('g')
@@ -67,23 +77,18 @@ export default function TempLineChart() {
         .curve(d3.curveBasis)
 
       graph
+        .selectAll('.path-line')
+        .data(nestedData)
+        .enter()
         .append('path')
-        .attr('d', lineGenerator(data))
+        .attr('class', 'line-path')
+        .attr('d', d => lineGenerator(d.values))
+        .attr('stroke', d => colorScale(d.key))
         .style('fill', 'none')
         .style('stroke-width', 5)
-        .style('stroke', 'maroon')
         .style('stroke-linejoin', 'round')
-
-      // graph
-      //   .selectAll('circle')
-      //   .data(data)
-      //   .enter()
-      //   .append('circle')
-      //   .attr('cy', d => yScale(yValue(d)))
-      //   .attr('cx', d => xScale(xValue(d)))
-      //   .attr('r', 6)
-      //   .attr('fill', 'cornflowerblue')
-      //   .style('opacity', 0.5)
+        .style('stroke-linecap', 'round')
+        .style('mix-blend-mode', 'multiply')
 
       graph
         .append('text')
@@ -111,9 +116,20 @@ export default function TempLineChart() {
 
       graph.selectAll('.tick line').style('color', '#C0C0BB')
       graph.select('line').remove()
+
+      svg
+        .append('g')
+        .attr('transform', 'translate(770,200)')
+        .call(colorLegend, {
+          colorScale,
+          circleRadius: 8,
+          spacing: 20,
+          textOffset: 12,
+          rectWidth: 150
+        })
     }
 
-    d3.csv('temperature.csv').then(data => {
+    d3.csv('weekdata.csv').then(data => {
       data.forEach(d => {
         d.temperature = +d.temperature
         d.timestamp = new Date(d.timestamp)
@@ -122,5 +138,47 @@ export default function TempLineChart() {
     })
   }, [sandbox])
 
-  return <svg ref={sandbox} width="700" height="400" />
+  return <svg ref={sandbox} width="900" height="400" />
+}
+
+function colorLegend(selection, props) {
+  const { colorScale, circleRadius, spacing, textOffset, rectWidth } = props
+
+  const container = selection.selectAll('rect').data([null])
+  const n = colorScale.domain().length
+  container
+    .enter()
+    .append('rect')
+    .merge(container)
+    .attr('x', -circleRadius * 2)
+    .attr('y', -circleRadius * 2)
+    .attr('rx', circleRadius * 2)
+    .attr('width', rectWidth)
+    .attr('height', spacing * n + circleRadius * 2)
+    .attr('fill', 'white')
+    .attr('opacity', 0.8)
+
+  const groups = selection.selectAll('.tick').data(colorScale.domain())
+  const groupsEnter = groups
+    .enter()
+    .append('g')
+    .attr('class', 'tick')
+  groupsEnter
+    .merge(groups)
+    .attr('transform', (_, i) => `translate(0,${i * spacing})`)
+
+  groups.exit().remove()
+
+  groupsEnter
+    .append('circle')
+    .merge(groups.select('circle'))
+    .attr('r', circleRadius)
+    .attr('fill', colorScale)
+
+  groupsEnter
+    .append('text')
+    .merge(groups.select('text'))
+    .text(d => d)
+    .attr('dy', '0.32em')
+    .attr('x', textOffset)
 }
