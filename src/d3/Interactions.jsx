@@ -75,7 +75,7 @@ const initailState = [
   { type: 'apple', id: Math.random(), selected: false },
   { type: 'lemon', id: Math.random(), selected: false },
   { type: 'apple', id: Math.random(), selected: false },
-  { type: 'lemon', id: Math.random(), selected: false },
+  { type: 'lemon', id: Math.random(), selected: true },
   { type: 'apple', id: Math.random(), selected: false }
 ]
 
