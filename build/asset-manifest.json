@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/static/css/main.1ff22c89.chunk.css",
+    "main.js": "/static/js/main.dad511fd.chunk.js",
+    "main.js.map": "/static/js/main.dad511fd.chunk.js.map",
+    "runtime~main.js": "/static/js/runtime~main.c5541365.js",
+    "runtime~main.js.map": "/static/js/runtime~main.c5541365.js.map",
+    "static/js/2.b0673070.chunk.js": "/static/js/2.b0673070.chunk.js",
+    "static/js/2.b0673070.chunk.js.map": "/static/js/2.b0673070.chunk.js.map",
+    "index.html": "/index.html",
+    "precache-manifest.19ef95bb64a7f1c1ad93e1c701698758.js": "/precache-manifest.19ef95bb64a7f1c1ad93e1c701698758.js",
+    "service-worker.js": "/service-worker.js",
+    "static/css/main.1ff22c89.chunk.css.map": "/static/css/main.1ff22c89.chunk.css.map",
+    "static/media/index.css": "/static/media/Raleway-Regular.9942588a.ttf"
+  }
+}
