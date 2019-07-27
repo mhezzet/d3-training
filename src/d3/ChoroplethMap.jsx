@@ -1,11 +1,12 @@
 import * as d3 from 'd3'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, useCallback } from 'react'
 import { feature } from 'topojson-client'
 
 export default function ChoroplethMap() {
   const sandbox = useRef(null)
   const [map, setMap] = useState(null)
   const [mapMeta, setMapMeta] = useState(null)
+  const [category, setCategory] = useState(null)
 
   useEffect(() => {
     if (!map) return
@@ -16,7 +17,13 @@ export default function ChoroplethMap() {
     const pathGenerator = d3.geoPath().projection(projection)
     const countries = feature(map, map.objects.countries)
 
-    const whole = svg.append('g')
+    const wholeUpdate = svg.selectAll('.whole').data([null])
+    const wholeEnter = wholeUpdate
+      .enter()
+      .append('g')
+      .attr('class', 'whole')
+    const whole = wholeUpdate.merge(wholeEnter)
+
     const legend = svg.append('g').attr('transform', 'translate(30,300)')
     svg.call(
       d3.zoom().on('zoom', () => {
@@ -25,19 +32,28 @@ export default function ChoroplethMap() {
     )
     const colorScale = economyColorScale(mapMeta)
 
-    whole
+    wholeEnter
       .append('path')
       .attr('class', 'sphere')
       .attr('d', pathGenerator({ type: 'Sphere' }))
 
-    whole
-      .selectAll('path')
-      .data(countries.features)
+    const countryPaths = whole.selectAll('.country2').data(countries.features)
+    const countryPathsEnter = countryPaths
       .enter()
       .append('path')
       .attr('class', 'country2')
-      .attr('fill', d => colorScale(mapMeta[d.id].economy))
       .attr('d', pathGenerator)
+      .attr('fill', d => colorScale(mapMeta[d.id].economy))
+
+    countryPathsEnter.merge(countryPaths).attr('opacity', d => {
+      if (!category) {
+        return 1
+      } else {
+        return mapMeta[d.id].economy === category ? 1 : 0.1
+      }
+    })
+
+    countryPathsEnter
       .append('title')
       .text(d => mapMeta[d.id].name + ' | ' + mapMeta[d.id].economy)
 
@@ -46,9 +62,11 @@ export default function ChoroplethMap() {
       circleRadius: 8,
       spacing: 20,
       textOffset: 12,
-      rectWidth: 240
+      rectWidth: 240,
+      setCategory: setCategory,
+      category
     })
-  }, [sandbox, map, mapMeta])
+  }, [sandbox, map, mapMeta, category, setCategory])
 
   useEffect(() => {
     d3.json('map.json').then(data => setMap(data))
@@ -62,24 +80,31 @@ export default function ChoroplethMap() {
 
 function economyColorScale(mapMeta) {
   const colorScale = d3.scaleOrdinal()
-
-  return colorScale
-    .domain(
-      Object.values(mapMeta)
-        .reduce(
-          (allColors, country) =>
-            allColors.includes(country.economy)
-              ? allColors
-              : [...allColors, country.economy],
-          []
-        )
-        .sort()
+  const domain = Object.values(mapMeta)
+    .reduce(
+      (allColors, country) =>
+        allColors.includes(country.economy)
+          ? allColors
+          : [...allColors, country.economy],
+      []
     )
-    .range(d3.schemeSpectral[7].reverse())
+    .sort()
+    .reverse()
+  const range = d3.schemeSpectral[domain.length]
+
+  return colorScale.domain(domain).range(range)
 }
 
 function economyColorLegend(selection, props) {
-  const { colorScale, circleRadius, spacing, textOffset, rectWidth } = props
+  const {
+    colorScale,
+    circleRadius,
+    spacing,
+    textOffset,
+    rectWidth,
+    setCategory,
+    category
+  } = props
 
   const container = selection.selectAll('rect').data([null])
   const n = colorScale.domain().length
@@ -103,6 +128,8 @@ function economyColorLegend(selection, props) {
   groupsEnter
     .merge(groups)
     .attr('transform', (_, i) => `translate(0,${i * spacing})`)
+    .attr('opacity', d => (d === category || category === null ? 1 : 0.4))
+    .on('click', d => (d === category ? setCategory(null) : setCategory(d)))
 
   groups.exit().remove()
 
